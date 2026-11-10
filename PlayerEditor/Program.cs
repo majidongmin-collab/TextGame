@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Numerics;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PlayerEditor
 {
@@ -37,6 +40,21 @@ namespace PlayerEditor
             return character;
         }
 
+        private static void WriteFile(Character character, string path, string name)
+        {
+            path = Path.Combine(path, name);
+            File.WriteAllText(path , character.ToString());
+
+            path = Path.GetFullPath(path);
+            Console.WriteLine($"{path} 파일에 저장됨");
+        }
+        private static void ReadFile(string path, string name)
+        {
+            path = Path.Combine(path, name);
+            string[] lines = File.ReadAllLines(path); 
+                       
+        }
+
         static void Main(string[] args)
         {
             string path = Directory.GetCurrentDirectory();
@@ -46,12 +64,48 @@ namespace PlayerEditor
 
             Character player = CreateCharacter("player", 30, 10, 8);
 
-        
+            //WriteFile(player, path, "Player.json");
 
-            string fileName = Path.Combine(path, "Player.json");
-            //File.WriteAllText(fileName, data.ToString());
+            while (true)
+            {
+                Console.Write("선택(1:파일 쓰기, 2:파일 읽기, 3:파일 수정) : ");
+                string input = Console.ReadLine()!;
 
-            Console.WriteLine($"{fileName} 생성됨");
+                int select;
+                if (int.TryParse(input, out select) == false)
+                {
+                    Console.WriteLine("잘못된 입력");
+
+                    continue;
+                }
+
+                switch (select)
+                {
+                    case 1:
+                        {
+                            WriteFile(player, path, "Player.json");
+                        }
+                        break;
+
+                     case 2:
+                         {
+                             ReadFile(path, "Player.json");
+                         }
+                         break;
+
+                    /*case 3:
+                        {
+                            EditFile(path, "Player.json);
+                        }
+                        break;*/
+
+                    default:
+                        {
+                            Console.WriteLine("잘못된 입력");
+                        }
+                        break;
+                }//switch(select)
+            }//while(true)  
 
 
         }

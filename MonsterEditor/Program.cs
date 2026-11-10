@@ -53,11 +53,8 @@ namespace MonsterEditor
         private static void ReadFile(string path, string name)
         {
             path = Path.Combine(path, name);
-            //string content = File.ReadAllText(path);
-            //Console.WriteLine(content);
 
             string[] lines = File.ReadAllLines(path);
-            //Console.WriteLine(lines.Length);
 
             Character[] MonsterDatas = new Character[lines.Length];
             for (int i = 0; i < lines.Length; i++)
