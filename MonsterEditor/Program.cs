@@ -21,7 +21,7 @@ namespace MonsterEditor
 
         }
 
-        private static void WriteFile(string[] names, Random random, string path, string name)
+        private static void WriteCsvFile(string[] names, Random random, string path, string name)
         {
             string print = "";
 
@@ -50,7 +50,7 @@ namespace MonsterEditor
             Console.WriteLine($"{path} 파일에 저장됨");
         }
 
-        private static void ReadFile(string path, string name)
+        private static void ReadCsvFile(string path, string name)
         {
             path = Path.Combine(path, name);
 
@@ -76,7 +76,7 @@ namespace MonsterEditor
             }
         }
 
-        private static void EditFile(string path, string name)
+        private static void EditCsvFile(string path, string name)
         {
             path = Path.Combine(path, name);
 
@@ -195,21 +195,21 @@ namespace MonsterEditor
                 {
                     case 1:
                         {
-                            WriteFile(names, random, path, "Monsters.csv");
+                            WriteCsvFile(names, random, path, "Monsters.csv");
                         }
                         break;
                     
                     case 2:
                         {
-                            ReadFile(path, "Monsters.csv");
+                            ReadCsvFile(path, "Monsters.csv");
                         }
                         break;
                     
-                case 3:
-                    {
-                        EditFile(path, "Monsters.csv");
-                    }
-                    break;
+                    case 3:
+                        {
+                             EditCsvFile(path, "Monsters.csv");
+                        }
+                        break;
 
                     default:
                         {

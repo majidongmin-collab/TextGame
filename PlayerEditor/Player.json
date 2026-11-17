@@ -1,6 +1,6 @@
 {
   "Name": "player",
-  "MaxHealth": "30",
-  "Attack": "10",
-  "Defence": "8",
+  "MaxHealth": 30,
+  "Attack": 10,
+  "Defence": 8
 }

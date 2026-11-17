@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Numerics;
 using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PlayerEditor
@@ -9,24 +11,11 @@ namespace PlayerEditor
     {
         private struct Character
         {
-            public string Name;
-            public float MaxHealth;
-            public float Attack;
-            public float Defence;
-       
+            public string Name { get; set; }
+            public float MaxHealth { get; set; }
+            public float Attack { get; set; }
+            public float Defence { get; set; }
 
-            public override string ToString()
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("{");
-                sb.AppendLine($"  \"Name\": \"{Name}\",");
-                sb.AppendLine($"  \"MaxHealth\": \"{MaxHealth}\",");
-                sb.AppendLine($"  \"Attack\": \"{Attack}\",");
-                sb.AppendLine($"  \"Defence\": \"{Defence}\",");
-                sb.AppendLine("}");
-
-                return sb.ToString();
-            }
         }
 
         static Character CreateCharacter(string name, float maxHealth, float attack, float defence)
@@ -43,16 +32,24 @@ namespace PlayerEditor
         private static void WriteFile(Character character, string path, string name)
         {
             path = Path.Combine(path, name);
-            File.WriteAllText(path , character.ToString());
 
-            path = Path.GetFullPath(path);
+            JsonSerializerOptions option = new JsonSerializerOptions();
+            option.WriteIndented = true;
+
+            string text = JsonSerializer.Serialize<Character>(character, option);
+            File.WriteAllText(path, text);
+
             Console.WriteLine($"{path} 파일에 저장됨");
         }
-        private static void ReadFile(string path, string name)
+
+        private static Character ReadJsonFile(string path, string name)
         {
             path = Path.Combine(path, name);
-            string[] lines = File.ReadAllLines(path); 
-                       
+
+            string content = File.ReadAllText(path);
+            Character character = JsonSerializer.Deserialize<Character>(content);
+
+            return character;
         }
 
         static void Main(string[] args)
@@ -89,7 +86,8 @@ namespace PlayerEditor
 
                      case 2:
                          {
-                             ReadFile(path, "Player.json");
+                            ReadJsonFile(path, "Player.json");
+                            Console.WriteLine($"{player.Name}, {player.MaxHealth}, {player.Attack}, {player.Defence}");                            
                          }
                          break;
 
