@@ -29,7 +29,7 @@ namespace PlayerEditor
             return character;
         }
 
-        private static void WriteFile(Character character, string path, string name)
+        private static void WriteJsonFile(Character character, string path, string name)
         {
             path = Path.Combine(path, name);
 
@@ -42,14 +42,91 @@ namespace PlayerEditor
             Console.WriteLine($"{path} 파일에 저장됨");
         }
 
-        private static Character ReadJsonFile(string path, string name)
+        private static void ReadJsonFile(string path, string name)
         {
             path = Path.Combine(path, name);
 
             string content = File.ReadAllText(path);
+            Console.WriteLine(content);
+        }
+
+        private static void EditJsonFile(string path, string name)
+        {
+            string filePath = Path.Combine(path, name);
+            string content = File.ReadAllText(filePath);
             Character character = JsonSerializer.Deserialize<Character>(content);
 
-            return character;
+            while (true)
+            {
+                Console.Write("편집할 플레이어 이름 : ");
+                string changetName = Console.ReadLine()!;
+
+                if (character.Name != changetName)
+                {
+                    Console.WriteLine($"'{changetName}'을 잘못입력하거나 존재하지 않음.");
+                    continue;      
+                }
+                break;
+            }//while(true)
+
+            int select;
+            while (true)
+            {
+                Console.Write("변경할 스테이터스 입력(1:MaxHealth, 2:Attack, 3:Defence) : ");
+                string input2 = Console.ReadLine()!;
+
+                if (int.TryParse(input2, out select) == false)
+                {
+                    Console.WriteLine("잘못된 입력");
+                    continue;
+                }
+
+                if (select < 1 || select > 4)
+                {
+                    Console.WriteLine("잘못된 입력");
+                    continue;
+                }
+
+                break;
+            }//while(true)
+
+            float value;
+            while (true)
+            {
+                Console.Write("값 입력 : ");
+                string input3 = Console.ReadLine()!;
+
+                if (float.TryParse(input3, out value) == false)
+                {
+                    Console.WriteLine("잘못된 입력");
+                    continue;
+                }
+
+                break;
+            }//while(true)
+
+            switch (select)
+            {
+                case 1:
+                    {
+                        character.MaxHealth = value;
+                    }
+                    break;
+
+                case 2:
+                    {
+                        character.Attack = value;
+                    }
+                    break;
+
+                case 3:
+                    {
+                        character.Defence = value;
+                    }
+                    break;
+            }//switch(true)
+            WriteJsonFile(character, path, name);
+
         }
 
         static void Main(string[] args)
@@ -80,22 +157,21 @@ namespace PlayerEditor
                 {
                     case 1:
                         {
-                            WriteFile(player, path, "Player.json");
+                            WriteJsonFile(player, path, "Player.json");
                         }
                         break;
 
                      case 2:
                          {
-                            ReadJsonFile(path, "Player.json");
-                            Console.WriteLine($"{player.Name}, {player.MaxHealth}, {player.Attack}, {player.Defence}");                            
+                            ReadJsonFile(path, "Player.json");                                                 
                          }
                          break;
 
-                    /*case 3:
+                    case 3:
                         {
-                            EditFile(path, "Player.json);
+                            EditJsonFile(path, "Player.json");
                         }
-                        break;*/
+                        break;
 
                     default:
                         {
